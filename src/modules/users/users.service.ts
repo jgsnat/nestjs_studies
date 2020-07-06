@@ -5,6 +5,7 @@ import { CreateUserDto } from './dtos/create-user.dto';
 import { UserRole } from './user-roles.enum';
 import { User } from './user.entity';
 import { UpdateUserDto } from './dtos/update-users.dto';
+import { FindUsersQueryDto } from './dtos/find-users-query.dto';
 
 @Injectable()
 export class UsersService {
@@ -56,6 +57,12 @@ export class UsersService {
         if (result.affected === 0) {
             throw new NotFoundException('A user with the given ID was not found');
         }
+    }
+
+    async findUsers(queryDto: FindUsersQueryDto): Promise<{ users: User[], total: number }> {
+        const users = await this.repository.findUsers(queryDto);
+
+        return users;
     }
     
 }
