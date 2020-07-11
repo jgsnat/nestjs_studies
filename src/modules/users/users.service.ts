@@ -33,6 +33,8 @@ export class UsersService {
         return user;
     }
 
+    /*
+    // DEPRECIATED
     async updateUser(updateUserDto: UpdateUserDto, id: string): Promise<User> {
         const user = await this.findUserById(id);
         
@@ -49,6 +51,18 @@ export class UsersService {
             return user;
         } catch (err) {
             throw new InternalServerErrorException('Error saving the user in the database');
+        }
+    }*/
+
+    async updateUser(updateUserDto: UpdateUserDto, id: string) {
+        const result = await this.repository.update({ id }, updateUserDto);
+
+        if (result.affected > 0) {
+            const user = await this.findUserById(id);
+
+            return user;
+        } else {
+            throw new NotFoundException('User not found');
         }
     }
     
